@@ -160,11 +160,14 @@ public class OfficialAccount extends Factory {
 	 * @param token
 	 * @throws IOException
 	 */
-	public void join(HttpServletResponse response, HttpServletRequest request, String token) throws IOException {
+	public void join(HttpServletResponse response, HttpServletRequest request, String token) throws Exception {
 		String signature = request.getParameter("signature");
 		String timestamp = request.getParameter("timestamp");
 		String nonce = request.getParameter("nonce");
 		String echostr = request.getParameter("echostr");
+		if (signature==null || timestamp==null || nonce==null || echostr==null) {
+			throw new Exception("参数异常");
+		}
 		join(response, token, timestamp, nonce, signature, echostr);
 	}
 

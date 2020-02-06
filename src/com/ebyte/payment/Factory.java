@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -17,12 +18,11 @@ import javax.crypto.spec.SecretKeySpec;
 import com.ebyte.weixin.util.Config;
 import com.ebyte.weixin.util.Util;
 
-class Factory {
-	
+public class Factory {
+
 	protected enum SignType {
 		MD5, HMACSHA256
 	}
-
 
 	protected static final String FIELD_SIGN = "sign";
 	protected static final String FIELD_SIGN_TYPE = "sign_type";
@@ -30,7 +30,7 @@ class Factory {
 	protected static final String SYMBOLS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	protected static final Random RANDOM = new SecureRandom();
-	
+
 	/**
 	 * 生成签名
 	 *
@@ -71,8 +71,7 @@ class Factory {
 	 * @param signType 签名方式
 	 * @return 签名
 	 */
-	protected String generateSignature(final Map<String, String> data, String key, SignType signType)
-			throws Exception {
+	protected String generateSignature(final Map<String, String> data, String key, SignType signType) throws Exception {
 		Set<String> keySet = data.keySet();
 		String[] keyArray = keySet.toArray(new String[keySet.size()]);
 		Arrays.sort(keyArray);
@@ -281,6 +280,23 @@ class Factory {
 			throw new Exception(result.get("err_code_des"));
 		}
 		return result;
+	}
+
+	/**
+	 * 授权码查询openid
+	 * @param authCode
+	 * @return
+	 * @throws Exception
+	 */
+	protected String authCodeOpenid(String authCode) throws Exception {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("appid", Config.getAppid());
+		map.put("mch_id", Config.getMchid());
+		map.put("auth_code", authCode);
+		map.put("nonce_str", generateNonceStr());
+		map.put("sign", generateSignature(map));
+		Map<String, String> rs = requsetMap(ApiUrl.authCodeOpenid, map);
+		return rs.get("openid");
 	}
 
 }

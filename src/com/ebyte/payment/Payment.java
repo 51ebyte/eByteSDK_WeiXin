@@ -3,8 +3,12 @@ package com.ebyte.payment;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ebyte.weixin.util.Config;
-import com.ebyte.weixin.util.Util;
+import com.ebyte.payment.bill.Bill;
+import com.ebyte.payment.notify.Notify;
+import com.ebyte.payment.order.Order;
+import com.ebyte.payment.pay.Pay;
+import com.ebyte.payment.refund.Refund;
+import com.ebyte.weixin.util.*;
 
 /**
  * 支付基类
@@ -19,6 +23,7 @@ public class Payment extends Factory {
 	public Order order = new Order();
 	public Notify notify = new Notify();
 	public Refund refund = new Refund();
+	
 
 	/**
 	 * 开启/关闭沙箱状态
@@ -39,7 +44,7 @@ public class Payment extends Factory {
 		data.put("mch_id", Config.getMchid());
 		data.put("nonce_str", this.generateNonceStr());
 		data.put("sign", this.generateSignature(data));
-		Map<String, String> result = Util.xmlToMap(Util.httpPost(Url.getSandboxSignKeyUrl, Util.mapToXml(data)));
+		Map<String, String> result = Util.xmlToMap(Util.httpPost(ApiUrl.getSandboxSignKeyUrl, Util.mapToXml(data)));
 		Config.setMchkey(result.get("sandbox_signkey"));
 		Config.setIsSANDBOX(true);
 	}
