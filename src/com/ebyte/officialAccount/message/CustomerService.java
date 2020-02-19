@@ -8,7 +8,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ebyte.officialAccount.Factory;
-import com.ebyte.weixin.util.Util;
+import com.ebyte.weixin.util.Http;
 import com.ebyte.weixin.util.WxException;
 import com.ebyte.officialAccount.ApiUrl;
 
@@ -144,7 +144,7 @@ public class CustomerService extends Factory {
 		} else {
 			throw new Exception("params 'to' abnormal");
 		}
-		String result = Util.httpPost(url, message.toJSONString());
+		String result = Http.post(url, message.toJSONString());
 		JSONObject rs = JSON.parseObject(result);
 		if (rs.getString("errcode") != "0") {
 			throw new WxException(rs.getString("errcode"), rs.getString("errmsg"));
@@ -201,7 +201,7 @@ public class CustomerService extends Factory {
 	public JSONObject getlist() throws Exception {
 		String accessToken = this.getAccessToken();
 		String url = String.format(ApiUrl.getCustomServiceListUrl, accessToken);
-		String result = Util.httpGet(url);
+		String result = Http.get(url);
 		JSONObject rs = JSON.parseObject(result);
 		if (rs.getString("errcode") != "0") {
 			throw new WxException(rs.getString("errcode"), rs.getString("errmsg"));
@@ -216,7 +216,7 @@ public class CustomerService extends Factory {
 		kf.put("kf_account", account);
 		kf.put("nickname", nickname);
 		kf.put("password", password);
-		String result = Util.httpPost(String.format(url, accessToken), message.toJSONString());
+		String result = Http.post(String.format(url, accessToken), message.toJSONString());
 		JSONObject rs = JSON.parseObject(result);
 		if (rs.getString("errcode") != ("0")) {
 			throw new WxException(rs.getString("errcode"), rs.getString("errmsg"));
@@ -238,7 +238,7 @@ public class CustomerService extends Factory {
 		obj.put("command", "Typing");
 		String accessToken = this.getAccessToken();
 		String url = String.format(ApiUrl.getCustomMessageTypingUrl, accessToken);
-		String result = Util.httpPost(url, obj.toJSONString());
+		String result = Http.post(url, obj.toJSONString());
 		JSONObject rs = JSON.parseObject(result);
 		if (rs.getString("errcode") != "0") {
 			throw new WxException(rs.getString("errcode"), rs.getString("errmsg"));
@@ -261,7 +261,7 @@ public class CustomerService extends Factory {
 		obj.put("command", cancel ? "CancelTyping" : "Typing");
 		String accessToken = this.getAccessToken();
 		String url = String.format(ApiUrl.getCustomMessageTypingUrl, accessToken);
-		String result = Util.httpPost(url, obj.toJSONString());
+		String result = Http.post(url, obj.toJSONString());
 		JSONObject rs = JSON.parseObject(result);
 		if (rs.getString("errcode") != "0") {
 			throw new WxException(rs.getString("errcode"), rs.getString("errmsg"));

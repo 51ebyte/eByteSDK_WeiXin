@@ -42,9 +42,9 @@ public class Payment extends Factory {
 	public void setSANDBOX() throws Exception {
 		Map<String, String> data = new HashMap<String, String>();
 		data.put("mch_id", Config.getMchid());
-		data.put("nonce_str", this.generateNonceStr());
-		data.put("sign", this.generateSignature(data));
-		Map<String, String> result = Util.xmlToMap(Util.httpPost(ApiUrl.getSandboxSignKeyUrl, Util.mapToXml(data)));
+		data.put("nonce_str", generateNonceStr());
+		data.put("sign", generateSignature(data));
+		Map<String, String> result = Util.xmlToMap(Http.post(ApiUrl.getSandboxSignKeyUrl, Util.mapToXml(data)));
 		Config.setMchkey(result.get("sandbox_signkey"));
 		Config.setIsSANDBOX(true);
 	}

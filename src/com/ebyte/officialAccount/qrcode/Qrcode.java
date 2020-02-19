@@ -2,7 +2,7 @@ package com.ebyte.officialAccount.qrcode;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ebyte.officialAccount.Factory;
-import com.ebyte.weixin.util.Util;
+import com.ebyte.weixin.util.Http;
 import com.ebyte.officialAccount.ApiUrl;
 
 public class Qrcode extends Factory {
@@ -31,7 +31,7 @@ public class Qrcode extends Factory {
 		param.put("expire_seconds", expire_seconds);
 		param.put("action_name", action_name);
 		param.put("action_info", info);
-		return this.resultFormat(Util.httpPost(url, param.toJSONString()));
+		return this.resultFormat(Http.post(url, param.toJSONString()));
 	}
 
 	private JSONObject ticket(String action_name, int scene_id) throws Exception {
@@ -57,7 +57,7 @@ public class Qrcode extends Factory {
 		JSONObject param = new JSONObject();
 		param.put("action_name", action_name);
 		param.put("action_info", info);
-		return this.resultFormat(Util.httpPost(url, param.toJSONString()));
+		return this.resultFormat(Http.post(url, param.toJSONString()));
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class Qrcode extends Factory {
 		} else if (type.equals("ticket")) {
 			return rs.getString("ticket");
 		} else if (type.equals("image")) {
-			return Util.httpGet(String.format(ApiUrl.qrcodeShowUrl, rs.getString("ticket")));
+			return Http.get(String.format(ApiUrl.qrcodeShowUrl, rs.getString("ticket")));
 		}
 		return rs.toJSONString();
 	}
@@ -118,7 +118,7 @@ public class Qrcode extends Factory {
 		} else if (type.equals("ticket")) {
 			return rs.getString("ticket");
 		} else if (type.equals("image")) {
-			return Util.httpGet(String.format(ApiUrl.qrcodeShowUrl, rs.getString("ticket")));
+			return Http.get(String.format(ApiUrl.qrcodeShowUrl, rs.getString("ticket")));
 		}
 		return rs.toJSONString();
 
@@ -154,7 +154,7 @@ public class Qrcode extends Factory {
 		} else if (type.equals("ticket")) {
 			return rs.getString("ticket");
 		} else if (type.equals("image")) {
-			return Util.httpGet(String.format(ApiUrl.qrcodeShowUrl, rs.getString("ticket")));
+			return Http.get(String.format(ApiUrl.qrcodeShowUrl, rs.getString("ticket")));
 		}
 		return rs.toJSONString();
 	}
@@ -185,7 +185,7 @@ public class Qrcode extends Factory {
 		} else if (type.equals("ticket")) {
 			return rs.getString("ticket");
 		} else if (type.equals("image")) {
-			return Util.httpGet(String.format(ApiUrl.qrcodeShowUrl, rs.getString("ticket")));
+			return Http.get(String.format(ApiUrl.qrcodeShowUrl, rs.getString("ticket")));
 		}
 		return rs.toJSONString();
 	}

@@ -11,6 +11,7 @@ import com.ebyte.payment.Factory;
 import com.ebyte.payment.Payment;
 import com.ebyte.payment.order.Order;
 import com.ebyte.weixin.util.Config;
+import com.ebyte.weixin.util.Http;
 import com.ebyte.weixin.util.Util;
 
 /**
@@ -38,11 +39,11 @@ public class Pay extends Factory {
 		Map<String, String> prepay = new Order().unify(data);
 		Map<String, String> result = new HashMap<String, String>();
 		result.put("appId", Config.getAppid());
-		result.put("timeStamp", String.valueOf(this.getCurrentTimestamp()));
+		result.put("timeStamp", String.valueOf(getCurrentTimestamp()));
 		result.put("nonceStr", generateNonceStr());
 		result.put("package", "prepay_id=" + prepay.get("prepay_id"));
 		result.put("signType", Payment.SignType.MD5.toString());
-		result.put("paySign", this.generateSignature(result, Config.getMchkey()));
+		result.put("paySign", generateSignature(result, Config.getMchkey()));
 		return result;
 	}
 
@@ -87,17 +88,17 @@ public class Pay extends Factory {
 		Map<String, String> data = new HashMap<String, String>();
 		data.put("appid", Config.getAppid());
 		data.put("mch_id", Config.getMchid());
-		data.put("time_stamp", String.valueOf(this.getCurrentTimestamp()));
-		data.put("nonce_str", this.generateNonceStr());
+		data.put("time_stamp", String.valueOf(getCurrentTimestamp()));
+		data.put("nonce_str", generateNonceStr());
 		data.put("product_id", productId);
-		String[] keyArray = this.ASCIISort(data);
+		String[] keyArray = ASCIISort(data);
 		StringBuilder sb = new StringBuilder();
 		for (String k : keyArray) {
 			if (data.get(k).trim().length() > 0) {
 				sb.append(k).append("=").append(data.get(k).trim()).append("&");
 			}
 		}
-		sb.append("sign=").append(this.generateSignature(data));
+		sb.append("sign=").append(generateSignature(data));
 		return "weixin://wxpay/bizpayurl?" + sb.toString();
 	}
 
@@ -135,9 +136,9 @@ public class Pay extends Factory {
 		result.put("partnerId", Config.getMchid());
 		result.put("prepayId", prepay.get("prepay_id"));
 		result.put("package", "Sign=WXPay");
-		result.put("nonceStr", this.generateNonceStr());
-		result.put("timeStamp", String.valueOf(this.getCurrentTimestamp()));
-		result.put("sign", this.generateSignature(result));
+		result.put("nonceStr", generateNonceStr());
+		result.put("timeStamp", String.valueOf(getCurrentTimestamp()));
+		result.put("sign", generateSignature(result));
 		return result;
 	}
 
@@ -157,7 +158,7 @@ public class Pay extends Factory {
 		data.put("nonce_str", generateNonceStr());
 		data.put("spbill_create_ip", Util.getClientIp());
 		data.put("sign", generateSignature(data));
-		Map<String, String> result = Util.xmlToMap(Util.httpPost(ApiUrl.micropayUrl, Util.mapToXml(data)));
+		Map<String, String> result = Util.xmlToMap(Http.post(ApiUrl.micropayUrl, Util.mapToXml(data)));
 		if (result.get("return_code").equals("FAIL")) {
 			String message = result.get("return_msg") != null ? result.get("return_msg") : result.get("retmsg");
 			throw new Exception(message);

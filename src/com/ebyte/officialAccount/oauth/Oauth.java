@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ebyte.officialAccount.Factory;
-import com.ebyte.weixin.util.Util;
+import com.ebyte.weixin.util.Config;
+import com.ebyte.weixin.util.Http;
 import com.ebyte.officialAccount.ApiUrl;
 
 public class Oauth extends Factory {
@@ -23,10 +24,10 @@ public class Oauth extends Factory {
 	public static final String SNSAPI_BASE = "snsapi_base";
 	public static final String SNSAPI_USERINFO = "snsapi_userinfo";
 
-	private String appid = Util.getWxConfig("appid");
-	private String secret = Util.getWxConfig("secret");
-	private String redirect = Util.getWxConfig("oauth_url");
-	private String scope = Util.getWxConfig("scope");
+	private String appid = Config.getAppid();
+	private String secret = Config.getSecret();
+	private String redirect = Config.getOauthCallback();
+	private String scope = Config.getOauthScopes();
 	private String state = "";
 	private String code = "";
 
@@ -69,6 +70,12 @@ public class Oauth extends Factory {
 		redirect(response);
 	}
 
+	/**
+	 * 获取用户信息
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
 	public JSONObject user(HttpServletRequest request) throws Exception {
 		Enumeration<String> enu = request.getParameterNames();
 		Map<String, String> params = new HashMap<String, String>();
@@ -85,14 +92,14 @@ public class Oauth extends Factory {
 		JSONObject token = getOauthAccessToken();
 		if (scope.equals(scopeType.USERINFO)) {
 			String url = String.format(ApiUrl.oauthUserInfo, token.get("access_token"), token.get("openid"));
-			return this.resultFormat(Util.httpGet(url));
+			return resultFormat(Http.get(url));
 		}
 		return token.getJSONObject("openid");
 	}
 
 	private JSONObject getOauthAccessToken() throws Exception {
 		String url = String.format(ApiUrl.oauthAccessToken, appid, secret, code);
-		return this.resultFormat(Util.httpGet(url));
+		return this.resultFormat(Http.get(url));
 	}
 
 }

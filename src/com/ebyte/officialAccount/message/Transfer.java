@@ -8,7 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.ebyte.officialAccount.Factory;
 import com.ebyte.officialAccount.ApiUrl;
 import com.ebyte.officialAccount.server.Server;
-import com.ebyte.weixin.util.Util;
+import com.ebyte.weixin.util.Http;
 import com.ebyte.weixin.util.WxException;
 
 /**
@@ -45,7 +45,7 @@ public class Transfer extends Factory {
 			video(Server.ReceiveMsg.get("MediaId"), Server.ReceiveMsg.get("ThumbMediaId"), "", "");
 			break;
 		}
-		String result = Util.httpPost(url, message.toJSONString());
+		String result = Http.post(url, message.toJSONString());
 		JSONObject rs = JSONObject.parseObject(result);
 		if (rs.getString("errcode") != "0") {
 			throw new WxException(rs.getString("errcode"), rs.getString("errmsg"));

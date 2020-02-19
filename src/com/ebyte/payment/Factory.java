@@ -16,6 +16,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import com.ebyte.weixin.util.Config;
+import com.ebyte.weixin.util.Http;
 import com.ebyte.weixin.util.Util;
 
 public class Factory {
@@ -272,7 +273,7 @@ public class Factory {
 	 * @throws Exception
 	 */
 	protected Map<String, String> requsetMap(String url, Map<String, String> data) throws Exception {
-		Map<String, String> result = Util.xmlToMap(Util.httpPost(url, Util.mapToXml(data)));
+		Map<String, String> result = Util.xmlToMap(Http.post(url, Util.mapToXml(data)));
 		if (result.get("return_code").equals("FAIL")) {
 			String message = result.get("return_msg") != null ? result.get("return_msg") : result.get("retmsg");
 			throw new Exception(message);

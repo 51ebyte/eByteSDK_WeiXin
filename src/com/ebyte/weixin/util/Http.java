@@ -101,14 +101,14 @@ public class Http {
 	 * 发送POST请求
 	 * 
 	 * @param url
-	 * @param xml
+	 * @param params
 	 * @return
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
-	public static String post(String url, String xml) throws ClientProtocolException, IOException {
+	public static String post(String url, String params) throws ClientProtocolException, IOException {
 		HttpPost httpPost = new HttpPost(url);
-		HttpEntity requestEntity = new StringEntity(xml, chartSet); // 设置请求体
+		HttpEntity requestEntity = new StringEntity(params, chartSet); // 设置请求体
 		httpPost.setEntity(requestEntity);
 		httpPost.addHeader("Content-Type", "application/xml"); // 设置请求头
 		return requestSend(httpPost);
@@ -118,17 +118,17 @@ public class Http {
 	 * 发送POST请求
 	 * 
 	 * @param url
-	 * @param xml
+	 * @param params
 	 * @param cerPath
 	 * @param cerPassword
 	 * @return
 	 * @throws Exception 
 	 */
-	public static String post(String url, String xml, boolean useCert)throws Exception {
+	public static String post(String url, String params, boolean useCert)throws Exception {
 		HttpPost httpPost = new HttpPost(url);
 		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(6000).setConnectTimeout(8000).build();
 		httpPost.setConfig(requestConfig);
-		StringEntity postEntity = new StringEntity(xml, chartSet);
+		StringEntity postEntity = new StringEntity(params, chartSet);
 		httpPost.addHeader("Content-Type", "text/xml");
 		httpPost.addHeader("User-Agent", USER_AGENT + " " + Config.getMchid());
 		httpPost.setEntity(postEntity);

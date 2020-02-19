@@ -13,23 +13,23 @@ public class Menu extends Factory{
 	 * 创建菜单
 	 * 
 	 * @param menu
+	 * @return 
 	 * @throws Exception
 	 */
-	public void create(JSONArray menu) throws Exception {
-		String url = String.format(ApiUrl.menuCreateUrl, this.getAccessToken());
-		String result = Util.httpPost(url, menu.toJSONString());
-		System.out.println(this.resultFormat(result));
+	public String create(JSONArray menu) throws Exception {
+		String url = String.format(ApiUrl.menuCreateUrl, getAccessToken());
+		String result = Http.post(url, menu.toJSONString());
+		return resultFormat(result).getString("errmsg");
 	}
 
 	/**
 	 * 查询菜单
-	 * 
 	 * @return
 	 * @throws Exception
 	 */
 	public JSONArray query() throws Exception {
-		String url = String.format(ApiUrl.getCurrentSelfMenuInfoUrl, this.getAccessToken());
-		JSONObject selfmenu = this.resultFormat(Util.httpGet(url));
+		String url = String.format(ApiUrl.getCurrentSelfMenuInfoUrl, getAccessToken());
+		JSONObject selfmenu = resultFormat(Http.get(url));
 		JSONObject button = JSON.parseObject(selfmenu.getString("selfmenu_info"));
 		return JSON.parseArray(button.getString("button"));
 	}
@@ -38,9 +38,9 @@ public class Menu extends Factory{
 	 * @return
 	 * @throws Exception
 	 */
-	public JSONObject delete() throws Exception {
-		String url = String.format(ApiUrl.menuDeleteUrl, this.getAccessToken());
-		return this.resultFormat(Util.httpGet(url));
+	public String delete() throws Exception {
+		String url = String.format(ApiUrl.menuDeleteUrl, getAccessToken());
+		return resultFormat(Http.get(url)).getString("errmsg");
 	}
 
 }

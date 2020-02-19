@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ebyte.officialAccount.Factory;
-import com.ebyte.weixin.util.Util;
+import com.ebyte.weixin.util.Http;
 import com.ebyte.officialAccount.ApiUrl;
 
 public class Tags extends Factory {
@@ -24,7 +24,7 @@ public class Tags extends Factory {
 		JSONObject tag = new JSONObject();
 		tag.put("name", name);
 		p.put("tag", tag);
-		JSONObject rs = this.resultFormat(Util.httpPost(url, p.toJSONString()));
+		JSONObject rs = this.resultFormat(Http.post(url, p.toJSONString()));
 		return rs.getJSONObject("tag");
 	}
 
@@ -36,7 +36,7 @@ public class Tags extends Factory {
 	 */
 	public JSONArray get() throws Exception {
 		String url = String.format(ApiUrl.tagsGetUrl, this.getAccessToken());
-		JSONObject rs = this.resultFormat(Util.httpGet(url));
+		JSONObject rs = this.resultFormat(Http.get(url));
 		return rs.getJSONArray("tags");
 	}
 
@@ -55,7 +55,7 @@ public class Tags extends Factory {
 		tag.put("id", id);
 		tag.put("name", name);
 		p.put("tag", tag);
-		JSONObject rs = this.resultFormat(Util.httpPost(url, p.toJSONString()));
+		JSONObject rs = this.resultFormat(Http.post(url, p.toJSONString()));
 		return rs.getString("errmsg");
 	}
 
@@ -72,14 +72,15 @@ public class Tags extends Factory {
 		JSONObject tag = new JSONObject();
 		tag.put("id", id);
 		p.put("tag", tag);
-		JSONObject rs = this.resultFormat(Util.httpPost(url, p.toJSONString()));
+		JSONObject rs = this.resultFormat(Http.post(url, p.toJSONString()));
 		return rs.getString("errmsg");
 	}
 
 	/**
 	 * 批量为用户打标签
 	 * 
-	 * @param tagid
+	 * @param tagid       标签id
+	 * @param openid_list 用户列表
 	 * @return
 	 * @throws Exception
 	 */
@@ -93,14 +94,15 @@ public class Tags extends Factory {
 	/**
 	 * 批量为用户打标签
 	 * 
-	 * @param tagid
+	 * @param tagid       标签id
+	 * @param openid_list 用户列表
 	 * @return
 	 * @throws Exception
 	 */
-	public String members_batchtagging(int tagid, ArrayList<String> list) throws Exception {
+	public String members_batchtagging(int tagid, ArrayList<String> openid_list) throws Exception {
 		JSONObject tag = new JSONObject();
 		tag.put("tagid", tagid);
-		tag.put("openid_list", list);
+		tag.put("openid_list", openid_list);
 		return members_batchtagging(tag.toJSONString());
 	}
 
@@ -113,14 +115,15 @@ public class Tags extends Factory {
 	 */
 	private String members_batchtagging(String params) throws Exception {
 		String url = String.format(ApiUrl.tagsMembersBatchtaggingUrl, this.getAccessToken());
-		String rs = Util.httpPost(url, params);
+		String rs = Http.post(url, params);
 		return JSON.parseObject(rs).getString("errmsg");
 	}
 
 	/**
 	 * 批量为用户取消标签
 	 * 
-	 * @param tagid
+	 * @param tagid       标签id
+	 * @param openid_list 用户列表
 	 * @return
 	 * @throws Exception
 	 */
@@ -154,7 +157,7 @@ public class Tags extends Factory {
 	 */
 	private String members_batchuntagging(String params) throws Exception {
 		String url = String.format(ApiUrl.tagsMembersBatchuntaggingUrl, this.getAccessToken());
-		String rs = Util.httpPost(url, params);
+		String rs = Http.post(url, params);
 		return JSON.parseObject(rs).getString("errmsg");
 	}
 
@@ -169,7 +172,7 @@ public class Tags extends Factory {
 		JSONObject tag = new JSONObject();
 		tag.put("openid", openid);
 		String url = String.format(ApiUrl.tagsGetidlistUrl, this.getAccessToken());
-		String rs = Util.httpPost(url, tag.toJSONString());
+		String rs = Http.post(url, tag.toJSONString());
 		return JSON.parseObject(rs).getJSONArray("tagid_list");
 	}
 

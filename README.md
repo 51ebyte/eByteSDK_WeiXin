@@ -1,15 +1,27 @@
+## 下载
+ 点击[此处](http://sdk.51ebyte.com/download/eByteSDK_WeiXin)下载jar包
 
-## 微信公众号
-```
+
+## 实例化
+```java
 static String appid = "wx5ddb95e1baae0d7f";
 static String secret = "c5e6aeb09061d2b83e6959dfc9fb7e50";
 public static com.ebyte.officialAccount.OfficialAccount officialAccount = com.ebyte.weixin.Weixin.officialAccount(appid, secret);
-public static void main(String[] args) throws Exception {}
+
+public static void main(String[] args) throws Exception {
+
+}
+
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    response.setHeader("Content-type", "text/html;charset=UTF-8");
+    response.setCharacterEncoding("UTF-8");
+}
 ```
+
 
 ### 开始开发
 #### 接入指南
-```
+```java
 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     response.setHeader("Content-type", "text/html;charset=UTF-8");
     response.setCharacterEncoding("UTF-8");
@@ -29,7 +41,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 ```
 
 #### 获取Access Token
-```    
+```java  
 try {
     officialAccount.getAccessToken();
 } catch (Exception e) {
@@ -37,32 +49,32 @@ try {
 }
 ```
 #### 获取微信服务器 IP (或IP段)
-```
+```java
 officialAccount.getValidIps();
 ```
 
 #### 清理接口调用次数
-```    
+```java
 ofoffficialAccount.clearQuota();
 ```
 
 #### 网络检测
-```
+```java
 officialAccount.checkNetwork(String action,String operator);
 ```
 #### 账号迁移openid转换
-```
+```java
 officialAccount.changeOpenid(String appid,ArrayList<String> openid_list);
+例：
 ArrayList<String> list=new ArrayList<String>();
 list.add("o0nOW04PREpZm9kPI3DW4xyQ3KNU");
-例：
 officialAccount.changeOpenid("wx5ddb95e1baae0d7f",list);
 ```
 
 
 ### 自定义菜单
 #### 创建菜单
-```
+```java
 try {
     
     JSONObject sub_button_item = new JSONObject();
@@ -105,18 +117,18 @@ try {
 ```
 
 #### 查询菜单 
-```    
+```java
 officialAccount.menu.query();
 ```
 
 #### 删除菜单 
-```    
+```java
 officialAccount.menu.delete();
 ```
 
 ### 消息管理
 #### 接收普通消息
-```
+```java
 response.setHeader("Content-type", "text/html;charset=UTF-8");
 response.setCharacterEncoding("UTF-8");
 try {
@@ -162,7 +174,7 @@ try {
 
 #### 接收事件推送
 #### 被动回复用户消息
-```
+```java
 response.setHeader("Content-type", "text/html;charset=UTF-8");
 response.setCharacterEncoding("UTF-8");
 try {
@@ -236,7 +248,7 @@ try {
 #### 客服消息
 ##### 客服管理
 ###### 添加客服
-```
+```java
 try {
     officialAccount.customerServiceMessage.add(String account, String nickname, String password);
 } catch (Exception e) {
@@ -245,7 +257,7 @@ try {
 ```
 
 ###### 修改客服
-```
+```java
 try {
     officialAccount.customerServiceMessage.update(String account, String nickname, String password);
 } catch (Exception e) {
@@ -254,7 +266,7 @@ try {
 ```
 
 ###### 删除客服
-```
+```java
 try {
     officialAccount.customerServiceMessage.delete(String account, String nickname, String password);
 } catch (Exception e) {
@@ -263,7 +275,7 @@ try {
 ```
 
 ###### 获取客服列表
-```
+```java
 try {
     officialAccount.customerServiceMessage.getlist();
 } catch (Exception e) {
@@ -272,7 +284,7 @@ try {
 ```
 
 ##### 消息转发（将接收到的消息转发给客服）
-```
+```java
 response.setHeader("Content-type", "text/html;charset=UTF-8");
 response.setCharacterEncoding("UTF-8");
 try {
@@ -296,7 +308,7 @@ try {
 ```
 
 ##### 作为客服消息发送（把消息单发给用户）
-```
+```java
 try {
     officialAccount.customerServiceMessage.text(String text).to(String openid).send();
     officialAccount.customerServiceMessage.image(String media_id).to(String openid).send();
@@ -314,7 +326,7 @@ try {
 ```
 
 ##### 作为客服消息发送（把消息群发给用户）
-```    
+```java    
 try {
     JSONArray user = new JSONArray();
     user.add("o0nOW04PREpZm9kPI3DW4xyQ3KNU1");
@@ -335,7 +347,7 @@ try {
 ```
 
 ##### 客服输入状态
-```    
+``` java
 try {
     //对用户下发“正在输入"状态
     officialAccount.customerServiceMessage.typing(String openid);
@@ -355,108 +367,93 @@ try {
 
 #### 其他说明
 ##### 请求消息的属性
-* 当你接收到用户发来的消息时，可能会提取消息中的相关属性，参考：<br/>
+>当你接收到用户发来的消息时，可能会提取消息中的相关属性，参考：
 请求消息基本属性(以下所有消息都有的基本属性)：
 
-```
-ToUserName 接收方帐号（该公众号 ID）
+>ToUserName 接收方帐号（该公众号 ID）
 FromUserName 发送方帐号（OpenID, 代表用户的唯一标识）
 CreateTime 消息创建时间（时间戳）
 MsgId 消息 ID（64位整型）
-```
 
 * 文本
-
-```
-MsgType text
+> MsgType text
 Content 文本消息内容
-```
+
     
 * 图片
 
-```
-MsgType image
+> MsgType image
 MediaId 图片消息媒体id，可以调用多媒体文件下载接口拉取数据。
 PicUrl 图片链接
-```
+
     
 * 语音
 
-```
-MsgType voice
+> MsgType voice
 MediaId 语音消息媒体id，可以调用多媒体文件下载接口拉取数据。
 Format 语音格式，如 amr，speex 等
 Recognition * 开通语音识别后才有
 请注意，开通语音识别后，用户每次发送语音给公众号时，微信会在推送的语音消息XML数据包中，增加一个 Recongnition 字段
-```
     
 * 视频
 
-```
-MsgType video
+> MsgType video
 MediaId 视频消息媒体id，可以调用多媒体文件下载接口拉取数据。
 ThumbMediaId 视频消息缩略图的媒体id，可以调用多媒体文件下载接口拉取数据。
-```
+
     
 * 小视频
 
-```
-MsgType shortvideo
+> MsgType shortvideo
 MediaId 视频消息媒体id，可以调用多媒体文件下载接口拉取数据。
 ThumbMediaId 视频消息缩略图的媒体id，可以调用多媒体文件下载接口拉取数据。
-```
+
     
 * 事件
 
-```
-MsgType event
+> MsgType event
 Event 事件类型 （如：subscribe(订阅)、unsubscribe(取消订阅) ...， CLICK 等）
-```
+
         
 * 扫描带参数二维码事件
 
-```
-EventKey 事件KEY值，比如：qrscene_123123，qrscene_为前缀，后面为二维码的参数值
+> EventKey 事件KEY值，比如：qrscene_123123，qrscene_为前缀，后面为二维码的参数值
 Ticket 二维码的 ticket，可用来换取二维码图片    
-```
+
     
 * 地理位置
 
-```
-Latitude 23.137466 地理位置纬度
+> Latitude 23.137466 地理位置纬度
 Longitude 113.352425 地理位置经度
 Precision 119.385040 地理位置精度
-```
+
 
 * 自定义菜单事件
 
-```
-EventKey 事件KEY值，与自定义菜单接口中KEY值对应，如：CUSTOM_KEY_001, www.qq.com
-```
+> EventKey 事件KEY值，与自定义菜单接口中KEY值对应，如：CUSTOM_KEY_001, www.qq.com
+
 
 * 地理位置
 
-```
-MsgType location
+> MsgType location
 Location_X 地理位置纬度
 Location_Y 地理位置经度
 Scale 地图缩放大小
 Label 地理位置信息
-```
+
 
 * 链接
 
-```
-MsgType link
+> MsgType link
 Title 消息标题
 Description 消息描述
 Url 消息链接
-```
+
 
 ##### 消息类型
 * 文本消息
 
-```
+```java
 content 回复的消息内容（换行：在content中能够换行，微信客户端就支持换行显示）
 
 new Text().setContent(String content);
@@ -464,21 +461,21 @@ new Text().setContent(String content);
     
 * 图片消息
 
-```
+```java
 MediaId 通过素材管理中的接口上传多媒体文件，得到的id
 
 new Image().setMediaId(String MediaId);
 ```
 * 语音消息
 
-```
+```java
 MediaId 通过素材管理中的接口上传多媒体文件，得到的id
 
 new Voice().setMediaId(String MediaId);
 ```
 * 视频消息
 
-```
+```java
 MediaId 通过素材管理中的接口上传多媒体文件，得到的id
 Title  视频消息的标题
 Description  视频消息的描述
@@ -490,7 +487,7 @@ new Video().setVideo(String MediaId, String Title, String Description);
 
 * 音乐消息
 
-```
+```java
 ThumbMediaId 缩略图的媒体id，通过素材管理中的接口上传多媒体文件，得到的id
 Title 音乐标题
 Description 音乐描述
@@ -506,7 +503,7 @@ new Music().setMediaId(String ThumbMediaId, String Title, String Description, St
 
 * 图文消息
 
-```
+```java
 //注：当用户发送文本、图片、视频、图文、地理位置这五种消息时，开只能回复1条图文消息；其余场景最多可回复8条图文消息
 
 Title 图文消息标题
@@ -540,7 +537,7 @@ new News().set(Map<String, Object> Item);
 ### 网页开发授权
 #### 网页授权
 ##### 发起授权
-```
+```java
 URL redirect_url = new URL("http://www.sunlue.com"); //授权后重定向的回调链接地址
 Weixin.oauth
     .scopes("snsapi_userinfo") //应用授权作用域，默认静默授权（snsapi_base）
@@ -549,9 +546,9 @@ Weixin.oauth
 ```
 
 ##### 拉取用户信息
-```
-    JSONObject userInfo = Weixin.oauth.user(HttpServletRequest request);
-    userInfo.get("openid");
+```java
+JSONObject userInfo = Weixin.oauth.user(HttpServletRequest request);
+userInfo.get("openid");
 ```
 #### JS-SDK
 
@@ -561,60 +558,60 @@ Weixin.oauth
 ### 用户管理
 #### 标签管理
 ##### 创建标签
-```
+```java
 officialAccount.tags.create(String name);
 ```
 ##### 修改标签
-```
+```java
 officialAccount.tags.update(int id, String name);
 ```
 ##### 删除标签
-```
+```java
 officialAccount.tags.delete(int id);
 ```
 ##### 获取标签
-```
+```java
 officialAccount.tags.get();
 ```
 ##### 获取标签下粉丝列表
-```
+```java
 officialAccount.user.gettag(int tagid);
 officialAccount.user.gettag(int tagid,String next_openid)
 ```
 ##### 批量为用户打标签
-```
+```java
 officialAccount.tags.members_batchtagging(int tagid, JSONArray openid_list);
 officialAccount.tags.members_batchtagging(int tagid, ArrayList<String> list);
 ```
 ##### 批量为用户取消标签
-```
+```java
 officialAccount.tags.members_batchuntagging(int tagid, JSONArray openid_list);
 officialAccount.tags.members_batchuntagging(int tagid, ArrayList<String> list);
 ```
 ##### 获取用户身上的标签列表
-```
+```java
 officialAccount.tags.getidlist(String openid);
 ```
 #### 设置用户备注名
-```
+```java
 officialAccount.user.updateremark(String openid, String remark)
 ```
 #### 获取用户信息
 ##### 获取用户基本信息(UnionID机制)
-```
+```java
 officialAccount.user.info(String openid)
 ```
 ##### 批量获取用户基本信息
-```
+```java
 officialAccount.user.infos(ArrayList<String> openids)
 ```
 #### 获取用户列表
-```
+```java
 officialAccount.user.list();
 officialAccount.user.list(String next_openid);
 ```
 #### 获取用户地理位置
-```
+```java
 protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
     response.setHeader("Content-type", "text/html;charset=UTF-8");
     response.setCharacterEncoding("UTF-8");
@@ -633,11 +630,11 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)t
 ```
 #### 黑名单管理
 ##### 获取黑名单
-```
+```java
 officialAccount.user.blacklist()
 ```
 ##### 拉黑用户
-```
+```java
 officialAccount.user.black(ArrayList<String> openid_list);
 例：
 ArrayList<String> list=new ArrayList<String>();
@@ -645,7 +642,7 @@ list.add("o0nOW04PREpZm9kPI3DW4xyQ3KNU");
 officialAccount.user.black(list);
 ```
 ##### 取消拉黑用户
-```
+```java
 officialAccount.user.unblack(ArrayList<String> openid_list);
 例：
 ArrayList<String> list=new ArrayList<String>();
@@ -655,7 +652,7 @@ officialAccount.user.unblack(list)
 ### 账号管理
 #### 二维码
 ##### 创建临时二维码
-```
+```java
 /**
  * @param scene_id 二维码详细信息（场景值ID,32位非0整型）
  * @param scene_str 二维码详细信息（场景值ID,字符串形式的ID，长度限制为1到64）
@@ -668,7 +665,7 @@ officialAccount.qrcode.temporary(String scene_str, int expire);
 officialAccount.qrcode.temporary(String scene_str, int expire, String type);
 ```
 ##### 创建永久二维码
-```
+```java
 /**
  * @param scene_id 二维码详细信息（场景值ID,32位非0整型）
  * @param scene_str 二维码详细信息（场景值ID,字符串形式的ID，长度限制为1到64）
@@ -680,7 +677,7 @@ officialAccount.qrcode.forever(String scene_str);
 officialAccount.qrcode.forever(String scene_str, String type);
 ```
 #### 短链接
-```
+```java
 officialAccount.shorturl(URL url);
 ```
 
@@ -688,7 +685,7 @@ officialAccount.shorturl(URL url);
 
 
 ## 微信支付
-```
+```java
 static String appid = "wxc0ae6e64361f2df5";
 static String secret = "ead02f9b44240da485d71cb286f564ed";
 static String mchid = "1239809802";
@@ -705,7 +702,7 @@ public static void main(String[] args) throws Exception {
 ### 支付订单
 #### 统一下单
 
-```
+```java
 Map<String, String> data = new HashMap<String, String>();
 data.put("body", "支付网站服务费");//商品描述
 data.put("out_trade_no", "SN2020010100000000000000000001");//商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*且在同一个商户号下唯一
@@ -721,7 +718,7 @@ try {
 ```
     
 #### 提交公众号、小程序支付
-```
+```java
 Map<String, String> data = new HashMap<String, String>();
 data.put("body", "支付网站服务费");//商品描述
 data.put("out_trade_no", "SN2020010100000000000000000001");//商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*且在同一个商户号下唯一
@@ -736,20 +733,20 @@ try {
 ```
     
 #### 查询订单
-```
+```java
 payment.order.queryByTransactionId(transaction_id); //根据微信订单号查询
 payment.order.queryByOutTradeNumber(out_trade_no); //根据商户订单号查询
 ```
 
 #### 关闭订单
-```
+```java
 payment.order.close(out_trade_no);
 ```
 
 ### 通知
-* 支付结果通知(在用户成功支付后，微信服务器会向该 订单中设置的回调URL 发起一个 POST 请求，请求的内容为一个 XML。里面包含了所有的详细信息)
+支付结果通知(在用户成功支付后，微信服务器会向该 订单中设置的回调URL 发起一个 POST 请求，请求的内容为一个 XML。里面包含了所有的详细信息)
 
-```
+```java
 Map<String, String> notify_data = payment.notify.unify(HttpServletRequest request, HttpServletResponse response);
 ```
     

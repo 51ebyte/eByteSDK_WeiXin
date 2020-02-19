@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ebyte.officialAccount.Factory;
-import com.ebyte.weixin.util.Util;
+import com.ebyte.weixin.util.Http;
 import com.ebyte.officialAccount.ApiUrl;
 
 public class User extends Factory {
@@ -13,7 +13,7 @@ public class User extends Factory {
 	/**
 	 * 获取标签下粉丝列表
 	 * 
-	 * @param tagid
+	 * @param tagid 标签ID
 	 * @return
 	 * @throws Exception
 	 */
@@ -24,17 +24,17 @@ public class User extends Factory {
 	/**
 	 * 获取标签下粉丝列表
 	 * 
-	 * @param tagid
-	 * @param next_openid
+	 * @param tagid 标签ID
+	 * @param next_openid 下一个用户openid
 	 * @return
 	 * @throws Exception
 	 */
 	public JSONObject gettag(int tagid, String next_openid) throws Exception {
-		String url = String.format(ApiUrl.userGetTagUrl, this.getAccessToken());
+		String url = String.format(ApiUrl.userGetTagUrl, getAccessToken());
 		JSONObject tag = new JSONObject();
 		tag.put("tagid", tagid);
 		tag.put("next_openid", next_openid);
-		return this.resultFormat(Util.httpPost(url, tag.toJSONString()));
+		return resultFormat(Http.post(url, tag.toJSONString()));
 	}
 
 	/**
@@ -46,12 +46,12 @@ public class User extends Factory {
 	 * @throws Exception
 	 */
 	public String updateremark(String openid, String remark) throws Exception {
-		String url = String.format(ApiUrl.userUpdateremarkUrl, this.getAccessToken());
+		String url = String.format(ApiUrl.userUpdateremarkUrl, getAccessToken());
 		JSONObject tag = new JSONObject();
 		tag.put("openid", openid);
 		tag.put("remark", remark);
-		JSONObject rs = this.resultFormat(Util.httpPost(url, tag.toJSONString()));
-		return rs.getString("errmsg");
+		String result = Http.post(url, tag.toJSONString());
+		return resultFormat(result).getString("errmsg");
 	}
 
 	/**
@@ -62,14 +62,14 @@ public class User extends Factory {
 	 * @throws Exception
 	 */
 	public JSONObject info(String openid) throws Exception {
-		String accessToken = this.getAccessToken();
+		String accessToken = getAccessToken();
 		String url = String.format(ApiUrl.userGetInfoUrl, accessToken, openid);
-		return this.resultFormat(Util.httpGet(url));
+		return resultFormat(Http.get(url));
 	}
 
 	/**
 	 * 批量获取用户基本信息
-	 * 
+	 * @param openids 用户标识
 	 * @return
 	 * @throws Exception
 	 */
@@ -83,10 +83,10 @@ public class User extends Factory {
 		}
 		JSONObject params = new JSONObject();
 		params.put("user_list", list);
-		String accessToken = this.getAccessToken();
+		String accessToken = getAccessToken();
 		String url = String.format(ApiUrl.userGetBatchInfoUrl, accessToken);
-		JSONObject rs = this.resultFormat(Util.httpPost(url, params.toJSONString()));
-		return rs.getJSONArray("user_info_list");
+		String result = Http.post(url, params.toJSONString());
+		return resultFormat(result).getJSONArray("user_info_list");
 	}
 
 	/**
@@ -96,10 +96,9 @@ public class User extends Factory {
 	 * @throws Exception
 	 */
 	public JSONObject list() throws Exception {
-		String accessToken = this.getAccessToken();
+		String accessToken = getAccessToken();
 		String url = String.format(ApiUrl.userGetListUrl, accessToken, "");
-		JSONObject rs = this.resultFormat(Util.httpGet(url));
-		return rs;
+		return resultFormat(Http.get(url));
 	}
 
 	/**
@@ -110,10 +109,9 @@ public class User extends Factory {
 	 * @throws Exception
 	 */
 	public JSONObject list(String next_openid) throws Exception {
-		String accessToken = this.getAccessToken();
+		String accessToken = getAccessToken();
 		String url = String.format(ApiUrl.userGetListUrl, accessToken, next_openid);
-		JSONObject rs = this.resultFormat(Util.httpGet(url));
-		return rs;
+		return resultFormat(Http.get(url));
 	}
 
 	/**
@@ -136,24 +134,24 @@ public class User extends Factory {
 	public JSONObject blacklist(String begin_openid) throws Exception {
 		JSONObject param = new JSONObject();
 		param.put("begin_openid", begin_openid);
-		String accessToken = this.getAccessToken();
+		String accessToken = getAccessToken();
 		String url = String.format(ApiUrl.userGetBlacklistUrl, accessToken);
-		return this.resultFormat(Util.httpPost(url, param.toString()));
+		return resultFormat(Http.post(url, param.toString()));
 	}
 
 	/**
 	 * 拉黑用户
 	 * 
-	 * @param begin_openid
+	 * @param openid_list
 	 * @return
 	 * @throws Exception
 	 */
 	public String black(ArrayList<String> openid_list) throws Exception {
 		JSONObject param = new JSONObject();
 		param.put("openid_list", openid_list);
-		String accessToken = this.getAccessToken();
+		String accessToken = getAccessToken();
 		String url = String.format(ApiUrl.userBlackUrl, accessToken);
-		JSONObject rs = this.resultFormat(Util.httpPost(url, param.toString()));
+		JSONObject rs = resultFormat(Http.post(url, param.toString()));
 		return rs.getString("errmsg");
 	}
 
@@ -167,10 +165,10 @@ public class User extends Factory {
 	public String unblack(ArrayList<String> openid_list) throws Exception {
 		JSONObject param = new JSONObject();
 		param.put("openid_list", openid_list);
-		String accessToken = this.getAccessToken();
+		String accessToken = getAccessToken();
 		String url = String.format(ApiUrl.userUnBlackUrl, accessToken);
-		JSONObject rs = this.resultFormat(Util.httpPost(url, param.toString()));
-		return rs.getString("errmsg");
+		String result=Http.post(url,param.toJSONString());
+		return resultFormat(result).getString("errmsg");
 	}
 
 }

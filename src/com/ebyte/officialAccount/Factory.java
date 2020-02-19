@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ebyte.weixin.util.Cache;
+import com.ebyte.weixin.util.Config;
+import com.ebyte.weixin.util.Http;
 import com.ebyte.weixin.util.Util;
 import com.ebyte.weixin.util.WxException;
 
@@ -26,10 +28,10 @@ public class Factory {
 		if (Cache.get("accessToken") != null) {
 			return Cache.get("accessToken").toString();
 		}
-		String appid = Util.getWxConfig("appid");
-		String secret = Util.getWxConfig("secret");
+		String appid = Config.getAppid();
+		String secret = Config.getSecret();
 		String url = String.format(ApiUrl.getAccessTokenUrl, appid, secret);
-		String result = Util.httpGet(url);
+		String result = Http.get(url);
 		JSONObject obj = JSON.parseObject(result);
 		if (obj.getString("errcode") != null) {
 			throw new WxException(obj.getString("errcode"), obj.getString("errmsg"));

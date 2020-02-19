@@ -1,14 +1,14 @@
 package com.ebyte.weixin.util;
 
+
 public class Config {
 
 	private static boolean debug;
 
 	private static String appid;
 	private static String secret;
-	private static String scopes;
-	private static String oauthUrl;
-	private static String url;
+	private static String oauthCallback;
+	private static String oauthScopes="snsapi_base";
 	private static String token;
 	private static String aeskey;
 
@@ -18,14 +18,6 @@ public class Config {
 	private static String certPath;
 	private static String certSecret;
 	private static Boolean isSANDBOX = false;
-	
-	public static String getCertSecret() {
-		return certSecret;
-	}
-
-	public static void setCertSecret(String certSecret) {
-		Config.certSecret = certSecret;
-	}
 
 	public static boolean isDebug() {
 		return debug;
@@ -51,28 +43,20 @@ public class Config {
 		Config.secret = secret;
 	}
 
-	public static String getScopes() {
-		return scopes;
+	public static String getOauthCallback() {
+		return oauthCallback;
 	}
 
-	public static void setScopes(String scopes) {
-		Config.scopes = scopes;
+	public static void setOauthCallback(String oauthCallback) {
+		Config.oauthCallback = oauthCallback;
 	}
 
-	public static String getOauthUrl() {
-		return oauthUrl;
+	public static String getOauthScopes() {
+		return oauthScopes;
 	}
 
-	public static void setOauthUrl(String oauthUrl) {
-		Config.oauthUrl = oauthUrl;
-	}
-
-	public static String getUrl() {
-		return url;
-	}
-
-	public static void setUrl(String url) {
-		Config.url = url;
+	public static void setOauthScopes(String oauthScopes) {
+		Config.oauthScopes = oauthScopes;
 	}
 
 	public static String getToken() {
@@ -115,20 +99,28 @@ public class Config {
 		Config.notfyUrl = notfyUrl;
 	}
 
-	public static Boolean getIsSANDBOX() {
-		return isSANDBOX;
-	}
-
-	public static void setIsSANDBOX(Boolean isSANDBOX) {
-		Config.isSANDBOX = isSANDBOX;
-	}
-
 	public static String getCertPath() {
 		return certPath;
 	}
 
 	public static void setCertPath(String certPath) {
 		Config.certPath = certPath;
+	}
+
+	public static String getCertSecret() {
+		return certSecret;
+	}
+
+	public static void setCertSecret(String certSecret) {
+		Config.certSecret = certSecret;
+	}
+
+	public static Boolean getIsSANDBOX() {
+		return isSANDBOX;
+	}
+
+	public static void setIsSANDBOX(Boolean isSANDBOX) {
+		Config.isSANDBOX = isSANDBOX;
 	}
 
 }
